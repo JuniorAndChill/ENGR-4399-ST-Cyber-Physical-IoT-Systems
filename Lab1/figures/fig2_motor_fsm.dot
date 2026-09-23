@@ -1,0 +1,22 @@
+
+digraph motor_fsm {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+  nodesep=0.55;
+  node [shape=circle, fixedsize=true, width=1.35, fontname="Helvetica",
+        fontsize=9, color=black, penwidth=1.1];
+  edge [fontname="Helvetica", fontsize=9, color=black, penwidth=1.0, arrowsize=0.7];
+
+  start [shape=point, width=0.12, label=""];
+  S0 [label="S0  OFF\nEN duty 0\nIn1=0 In2=0\nLED red", shape=doublecircle, width=1.30];
+  S1 [label="S1  FORWARD\nEN duty 255\nIn1=1 In2=0\nLED green"];
+  S2 [label="S2  REVERSE\nEN duty 255\nIn1=0 In2=1\nLED blue"];
+  S3 [label="S3  SWEEP\nEN duty ramp\nIn1=1 In2=0\nLED magenta"];
+
+  start -> S0 [label="reset"];
+  S0 -> S1 [label="SWITCH"];
+  S1 -> S2 [label="SWITCH"];
+  S2 -> S3 [label="SWITCH"];
+  S3 -> S0 [label="SWITCH", constraint=false];
+}

@@ -1,0 +1,20 @@
+
+digraph pages {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+  nodesep=0.6;
+  node [shape=box, style="rounded", fontname="Helvetica", fontsize=9,
+        color=black, penwidth=1.1, margin="0.14,0.10"];
+  edge [fontname="Helvetica", fontsize=9, color=black, penwidth=1.0, arrowsize=0.7];
+
+  start [shape=point, width=0.12, label=""];
+  P0 [label="Page 1  MOTOR CONTROL\nmode, direction,\nduty / 255 and percent", style="rounded,bold"];
+  P1 [label="Page 2  ENVIRONMENT\ntemp C and F, humidity,\nmotion state, time since"];
+  P2 [label="Page 3  SYSTEM INFO\npage index, uptime,\nfree heap, key legend"];
+
+  start -> P0 [label="reset"];
+  P0 -> P1 [label="PAGE"];
+  P1 -> P2 [label="PAGE"];
+  P2 -> P0 [label="PAGE", constraint=false];
+}

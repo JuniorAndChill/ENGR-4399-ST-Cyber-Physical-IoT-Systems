@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "author": "Daniel Critchlow Jr.",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+
+    { "type": "board-ssd1306", "id": "oled1", "top": -190, "left": 300,
+      "attrs": { "i2cAddress": "0x3c" } },
+
+    { "type": "wokwi-dht22", "id": "dht1", "top": -30, "left": 330, "attrs": {} },
+
+    { "type": "wokwi-pir-motion-sensor", "id": "pir1", "top": 160, "left": 330, "attrs": {} },
+
+    { "type": "wokwi-rgb-led", "id": "rgb1", "top": -140, "left": -190,
+      "attrs": { "common": "cathode" } },
+    { "type": "wokwi-resistor", "id": "r1", "top": 0,  "left": -150, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r2", "top": 35, "left": -150, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r3", "top": 70, "left": -150, "attrs": { "value": "220" } },
+
+    { "type": "wokwi-pushbutton", "id": "btn1", "top": 310, "left": -120,
+      "attrs": { "color": "green", "label": "SWITCH", "xray": "1" } },
+    { "type": "wokwi-pushbutton", "id": "btn2", "top": 310, "left": 20,
+      "attrs": { "color": "blue", "label": "PAGE", "xray": "1" } },
+
+    { "type": "wokwi-led", "id": "led_en", "top": 300, "left": 200,
+      "attrs": { "color": "yellow", "label": "EN (PWM)" } },
+    { "type": "wokwi-led", "id": "led_a", "top": 300, "left": 290,
+      "attrs": { "color": "green", "label": "In1 / DIRA" } },
+    { "type": "wokwi-led", "id": "led_b", "top": 300, "left": 380,
+      "attrs": { "color": "red", "label": "In2 / DIRB" } },
+    { "type": "wokwi-resistor", "id": "r4", "top": 250, "left": 190, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r5", "top": 250, "left": 280, "attrs": { "value": "220" } },
+    { "type": "wokwi-resistor", "id": "r6", "top": 250, "left": 370, "attrs": { "value": "220" } }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+
+    [ "oled1:SDA", "esp:21", "green",  [] ],
+    [ "oled1:SCL", "esp:22", "yellow", [] ],
+    [ "oled1:VCC", "esp:3V3", "red",   [] ],
+    [ "oled1:GND", "esp:GND.1", "black", [] ],
+
+    [ "dht1:VCC", "esp:3V3", "red",   [] ],
+    [ "dht1:SDA", "esp:4",  "orange", [] ],
+    [ "dht1:GND", "esp:GND.1", "black", [] ],
+
+    [ "pir1:VCC", "esp:5V",  "red",    [] ],
+    [ "pir1:OUT", "esp:16",  "magenta", [] ],
+    [ "pir1:GND", "esp:GND.2", "black", [] ],
+
+    [ "rgb1:R", "r1:2", "red",   [] ],
+    [ "rgb1:G", "r2:2", "green", [] ],
+    [ "rgb1:B", "r3:2", "blue",  [] ],
+    [ "r1:1", "esp:26", "red",   [] ],
+    [ "r2:1", "esp:27", "green", [] ],
+    [ "r3:1", "esp:33", "blue",  [] ],
+    [ "rgb1:COM", "esp:GND.2", "black", [] ],
+
+    [ "btn1:1.l", "esp:25", "gold",  [] ],
+    [ "btn1:2.l", "esp:GND.1", "black", [] ],
+    [ "btn2:1.l", "esp:32", "gold",  [] ],
+    [ "btn2:2.l", "esp:GND.1", "black", [] ],
+
+    [ "esp:18", "r4:1", "yellow", [] ],
+    [ "r4:2", "led_en:A", "yellow", [] ],
+    [ "led_en:C", "esp:GND.2", "black", [] ],
+    [ "esp:19", "r5:1", "green", [] ],
+    [ "r5:2", "led_a:A", "green", [] ],
+    [ "led_a:C", "esp:GND.2", "black", [] ],
+    [ "esp:5", "r6:1", "red", [] ],
+    [ "r6:2", "led_b:A", "red", [] ],
+    [ "led_b:C", "esp:GND.2", "black", [] ]
+  ],
+  "dependencies": {}
+}

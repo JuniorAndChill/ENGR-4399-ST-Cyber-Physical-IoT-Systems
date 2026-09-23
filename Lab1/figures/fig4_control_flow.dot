@@ -1,0 +1,45 @@
+
+digraph flow {
+  bgcolor="white";
+  fontname="Helvetica";
+  ranksep=0.28; nodesep=0.40;
+  node [shape=box, style="rounded", fontname="Helvetica", fontsize=9,
+        color=black, penwidth=1.1, margin="0.12,0.07"];
+  edge [fontname="Helvetica", fontsize=8.5, color=black, penwidth=1.0, arrowsize=0.65];
+
+  setup [label="setup()\nGPIO + LEDC attach, I2C, OLED,\nDHT begin, splash 1.5 s,\nenter S0 OFF", style="rounded,bold"];
+
+  b1 [label="SWITCH pressed?\n(40 ms debounce)", shape=diamond, style="", width=1.9, height=0.9];
+  a1 [label="mode = (mode+1) mod 4\nreset ramp on entry to SWEEP\napplyMotor()"];
+
+  b2 [label="PAGE pressed?\n(40 ms debounce)", shape=diamond, style="", width=1.9, height=0.9];
+  a2 [label="page = (page+1) mod 3\nredraw immediately"];
+
+  b3 [label="SWEEP and\n40 ms elapsed?", shape=diamond, style="", width=1.9, height=0.9];
+  a3 [label="duty += step, fold at 0 and 255\nanalogWrite(EN, duty)"];
+
+  b4 [label="PIR level changed?", shape=diamond, style="", width=1.9, height=0.8];
+  a4 [label="latch state, stamp millis()\nprint the edge once"];
+
+  b5 [label="2100 ms elapsed?", shape=diamond, style="", width=1.9, height=0.8];
+  a5 [label="read humidity + temperature\ngood: store, clear fail count\nbad: keep last values, count++"];
+
+  b6 [label="150 ms elapsed?", shape=diamond, style="", width=1.9, height=0.8];
+  a6 [label="clear, draw active page,\npush frame over I2C"];
+
+  loop [label="end of loop()  ->  repeat", shape=box, style="dashed"];
+
+  setup -> b1;
+  b1 -> a1 [label="yes"]; a1 -> b2;
+  b1 -> b2 [label="no"];
+  b2 -> a2 [label="yes"]; a2 -> b3;
+  b2 -> b3 [label="no"];
+  b3 -> a3 [label="yes"]; a3 -> b4;
+  b3 -> b4 [label="no"];
+  b4 -> a4 [label="yes"]; a4 -> b5;
+  b4 -> b5 [label="no"];
+  b5 -> a5 [label="yes"]; a5 -> b6;
+  b5 -> b6 [label="no"];
+  b6 -> a6 [label="yes"]; a6 -> loop;
+  b6 -> loop [label="no"];
+}

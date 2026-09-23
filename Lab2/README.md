@@ -131,6 +131,11 @@ Tracks 1–4 are original three-voice compositions written for this lab, in
 carried over unchanged; they are single-voice scores, so they play on the lead
 buzzer with the other two silent.
 
+The named tracks are loose arrangements rather than accurate transcriptions —
+roughly the right key and shape, but not close enough that you would place them
+without the title. Worth knowing before you wire up three buzzers expecting to
+recognise something.
+
 **About those durations.** Nothing was padded out by hand. The player computes how
 long one pass of a track takes, then repeats it the whole number of times that
 lands closest to `TARGET_PLAY_MS` (60 s, in `config.h`):
@@ -399,15 +404,6 @@ Anything marked *generated* is reproduced by `make songs` or
 - **Score data is not validated at compile time.** A voice whose bars do not add
   up will compile and run; it is caught at boot by the `[audit]` line and by
   `tools/import_song.py`, not by the compiler.
-
-## A note on score data
-
-The four original compositions (`songs_original.h`) were written for this lab and
-carry no third-party rights. The four melodies in `songs_classic.h` came from the
-in-class sketch in `original/`; transcriptions of commercial music are the
-copyright of the rights holders regardless of the file format they are stored in,
-which is worth being aware of before publishing a repository. The engine itself
-holds no music.
 
 ---
 

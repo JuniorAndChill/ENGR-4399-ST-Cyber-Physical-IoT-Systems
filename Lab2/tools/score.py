@@ -21,7 +21,9 @@ ROOT = os.path.dirname(HERE)
 SKETCH = os.path.join(ROOT, "sketch")
 
 ARRAY_RE = re.compile(
-    r"(?:const\s+)?int\s+(\w+)\s*\[\s*\]\s*=\s*\{(.*?)\}\s*;", re.S)
+    r"(?:static\s+)?(?:const\s+)?int\s+(\w+)\s*\[\s*\]"
+    r"(?:\s*(?:PROGMEM|__attribute__\s*\(\(.*?\)\)))*"
+    r"\s*=\s*\{(.*?)\}\s*;", re.S)
 TOKEN_RE = re.compile(r"[A-Za-z_]\w*|-?\d+")
 DEFINE_RE = re.compile(r"^\s*#define\s+(\w+)\s+(-?\d+)\s*$", re.M)
 
@@ -152,8 +154,32 @@ def timeline(voices, bpm, cfg, notes):
     return events, pass_us, n_pass, total
 
 
+def load_user_song():
+    """
+    Read sketch/songs_user.h. Returns (title, bpm, [lead, harm, bass]) when
+    HAVE_USER_SONG is 1, else None - so the desktop tools cover an imported
+    track automatically, exactly as the firmware does.
+    """
+    path = os.path.join(SKETCH, "songs_user.h")
+    if not os.path.exists(path):
+        return None
+    text = strip_comments(open(path).read())
+    m = re.search(r"#define\s+HAVE_USER_SONG\s+(\d+)", text)
+    if not m or m.group(1) == "0":
+        return None
+    title = re.search(r'#define\s+USER_SONG_TITLE\s+"([^"]*)"', text)
+    bpm = re.search(r"#define\s+USER_SONG_BPM\s+(\d+)", text)
+    arrays = load_arrays([path])
+    voices = [arrays.get(n) for n in ("userLead", "userHarm", "userBass")]
+    if not voices[0]:
+        return None
+    return (title.group(1) if title else "User Track",
+            int(bpm.group(1)) if bpm else 120,
+            voices)
+
+
 def default_playlist():
-    """The playlist as sketch.ino declares it."""
+    """The playlist as sketch.ino declares it, user track included."""
     notes = load_notes()
     arrays = load_arrays([
         os.path.join(SKETCH, "songs_original.h"),
@@ -172,4 +198,8 @@ def default_playlist():
     out = []
     for title, bpm, names in spec:
         out.append((title, bpm, [arrays.get(n) if n else None for n in names]))
+
+    user = load_user_song()
+    if user:
+        out.append(user)
     return out, notes, load_config()

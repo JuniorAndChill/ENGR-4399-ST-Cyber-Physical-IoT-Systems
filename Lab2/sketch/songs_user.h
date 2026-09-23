@@ -2,17 +2,34 @@
   songs_user.h - your own three-voice track goes here
   Lab 2: ESP32 Three-Voice Chiptune Jukebox
   ------------------------------------------------------------
-  This file is the supported way to add a track without touching
-  the engine or the sketch. Three steps:
+  THE FAST WAY
 
-    1. Paste your three score arrays over the placeholders below,
-       keeping the names userLead / userHarm / userBass.
-    2. Fill in USER_SONG_TITLE, USER_SONG_STYLE and USER_SONG_BPM.
-    3. Change HAVE_USER_SONG to 1.
+  If your score already exists in a sketch or a text file, do not
+  paste anything. Point the importer at it and it writes this file
+  for you:
 
-  The track then appears at the end of the jukebox's playlist. With
-  HAVE_USER_SONG at 0, everything in here is compiled out and costs
-  nothing.
+      python3 tools/import_song.py <yourfile> \
+          --voices <lead>,<harmony>,<bass> \
+          --bpm 190 --title "My Track" --style "Trap" --install
+
+  It reads arrays in any of the usual shapes - `int x[] = {...}`,
+  `const int x[] = {...}`, `const int x[] PROGMEM = {...}` - checks
+  that the three voices agree in length, refuses to install them if
+  they do not, and sets HAVE_USER_SONG to 1. The track then appears
+  at the end of the playlist, and `make preview` and `make verify`
+  pick it up automatically along with everything else.
+
+  Drop --install to just get the report without writing anything.
+
+  ------------------------------------------------------------
+  THE MANUAL WAY
+
+  Paste your three score arrays over the placeholders below, keeping
+  the names userLead / userHarm / userBass, fill in the title, style
+  and BPM, and change HAVE_USER_SONG to 1.
+
+  With HAVE_USER_SONG at 0, everything in here is compiled out and
+  costs nothing.
 
   ------------------------------------------------------------
   THE ONE RULE
@@ -25,14 +42,10 @@
   arrangement technique - but an accidental mismatch of half a beat
   is just a track that sounds wrong.
 
-  Two things catch that for you:
-
-    python3 tools/import_song.py <yourfile> \
-        --voices userLead,userHarm,userBass --bpm 190
-
-  reports each voice's length in bars and names any that disagree,
-  and the sketch prints an [audit] line over Serial at startup for
-  every voice whose length does not match its lead.
+  Two things catch that for you: the importer above reports each
+  voice's length in bars and names any that disagree, and the sketch
+  prints an [audit] line over Serial at startup for every voice whose
+  length does not match its lead.
 
   A bar of 4/4 adds up to 1.0 when you sum 1/divider over the bar:
   four quarter notes, or eight eighths, or a half plus two quarters.
@@ -44,6 +57,12 @@
   track the whole number of times that lands closest to
   TARGET_PLAY_MS (60 s by default, in config.h), so an 18-bar tune
   at 190 BPM runs about 23 s per pass and plays three times.
+
+  Tempo is worth a moment's thought. The same score at 95 BPM plays
+  at half speed and lands at one 45 s pass instead - which is a
+  different feel, not just a different length. If eighth notes are
+  carrying the groove, the faster reading is usually the one you
+  want.
 
   ------------------------------------------------------------
   BASS RANGE

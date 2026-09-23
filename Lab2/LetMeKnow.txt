@@ -1,0 +1,78 @@
+// =====================================================================
+//  "Let Me Know" - 3-voice chiptune score
+//  Score data only. Import it with:
+//
+//    python3 tools/import_song.py LetMeKnow.txt \
+//        --voices tamarLead,tamarArp,tamarBass \
+//        --bpm 92 --title "Let Me Know" --style "R&B" --install
+//
+//  Then `cd tools && make preview` to hear it, `make verify` to check
+//  its timing. 14 bars, 36.5 s per pass, x2 = 73 s at 92 BPM.
+// =====================================================================
+//
+//  The player loop that used to live at the bottom of this file has been
+//  removed rather than repaired, because it could not be repaired:
+//
+//    * Buzzers on GPIO 9/10/11. Those are Arduino Uno pin numbers. On an
+//      ESP32 they are wired to the internal SPI flash - driving them
+//      stops the board booting.
+//    * tone() on three pins at once. It owns one LEDC channel on ESP32
+//      (one timer on AVR) and re-points it at the last pin named, so only
+//      one voice can ever sound. This is the whole reason sketch/
+//      chiptune.h exists.
+//    * nextNoteTime = currentMillis + duration. A countdown schedule:
+//      every rounding error is inherited by every later note. Measured on
+//      this project: up to 201 ms of lag and 51 ms of voice desync.
+//
+//  sketch/chiptune.h already solves all three. This file only needs to be
+//  score data.
+//
+//  Two corrections to the score itself (the lead melody is unchanged):
+//
+//    * Arpeggio: C5 -> CS5, 8 places. The turnaround is F#m - D - A - E,
+//      all diatonic to A major; C natural was the file's only accidental.
+//    * Bassline: dropped one octave (FS4/D5/A4/E4 -> FS3/D3/A3/E3). It
+//      was sitting at 330-587 Hz, above most of the melody and inside the
+//      arpeggio's range, so it doubled the harmony instead of holding the
+//      bottom. Now 147-220 Hz. On a small piezo that is near the low
+//      rolloff - set BASS_OCTAVE_SHIFT to 12 in config.h if it is too
+//      quiet on your hardware.
+//
+//  Duration: 1 = whole, 2 = half, 4 = quarter, 8 = eighth, 16 = sixteenth,
+//  negative = dotted (1.5x). Each bar of 4/4 sums to 1.0.
+// =====================================================================
+
+
+// ---- Lead melody - unchanged (59 notes, 14 bars) ----
+const int tamarLead[] = {
+  CS5,4, CS5,8, B4,8, A4,4, FS4,4, A4,4, B4,8, CS5,4,
+  REST,8, E5,4, CS5,4, CS5,8, B4,8, A4,4, FS4,4, A4,4,
+  B4,8, A4,4, REST,8, REST,4, CS5,4, CS5,8, B4,8, A4,4,
+  FS4,4, A4,4, B4,8, CS5,4, REST,8, E5,4, FS5,4, E5,8,
+  CS5,8, B4,4, A4,4, B4,2, REST,2, FS4,8, FS4,8, REST,8,
+  A4,8, A4,4, REST,4, B4,8, B4,8, REST,8, CS5,8, CS5,4,
+  REST,4, D5,8, D5,8, REST,8, CS5,8, B4,4, A4,4, FS4,2,
+  REST,2, CS5,1, FS4,1
+};
+
+// ---- Arpeggios and chords (82 notes, 14 bars) ----
+const int tamarArp[] = {
+  FS4,8, A4,8, CS5,8, A4,8, FS4,8, A4,8, CS5,8, A4,8,
+  D5,8, FS5,8, A5,8, FS5,8, D5,8, FS5,8, A5,8, FS5,8,
+  A4,8, CS5,8, E5,8, CS5,8, A4,8, CS5,8, E5,8, CS5,8,
+  E4,8, GS4,8, B4,8, GS4,8, E4,8, GS4,8, B4,8, GS4,8,
+  FS4,8, A4,8, CS5,8, A4,8, FS4,8, A4,8, CS5,8, A4,8,
+  D5,8, FS5,8, A5,8, FS5,8, D5,8, FS5,8, A5,8, FS5,8,
+  A4,8, CS5,8, E5,8, CS5,8, A4,8, CS5,8, E5,8, CS5,8,
+  E4,8, GS4,8, B4,8, GS4,8, E4,8, GS4,8, B4,8, GS4,8,
+  FS4,4, REST,4, FS4,4, REST,4, D5,4, REST,4, D5,4, REST,4,
+  A4,4, REST,4, A4,4, REST,4, E4,4, REST,4, E4,4, REST,4,
+  A4,1, FS4,1
+};
+
+// ---- Bassline (14 notes, 14 bars) ----
+const int tamarBass[] = {
+  FS3,1, D3,1, A3,1, E3,1, FS3,1, D3,1, A3,1, E3,1,
+  FS3,1, D3,1, A3,1, E3,1, FS3,1, FS3,1
+};
+

@@ -70,10 +70,11 @@ non-blocking and the technique scales to systems with additional tasks.
 
 ## Known Limitations
 
-* **Resistor value.** `diagram.json` specifies 220 kΩ series resistors — far above
-  the 220–330 Ω normally used for LED current limiting. The Wokwi LED model still
-  illuminates clearly, so the logic is fully demonstrable, but a physical build
-  should use ~220–330 Ω per channel.
+* **Resistor value.** The original Wokwi project specified 220 kΩ series resistors
+  — far above the 220–330 Ω normally used for LED current limiting — which the
+  submitted report documents as a limitation. `diagram.json` in this repository has
+  since been corrected to **220 Ω** per channel, the value a physical build should
+  use. The report and `SAR1_Screenshot.png` reflect the original 220 kΩ wiring.
 * **No Serial instrumentation.** The sketch emits no Serial output, so verification
   is visual rather than logged. Adding `Serial.begin(115200)` and printing each
   state transition would give timestamped evidence.

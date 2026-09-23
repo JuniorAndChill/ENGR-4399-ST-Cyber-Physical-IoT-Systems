@@ -1,0 +1,212 @@
+// =====================================================================
+//  Fetty Wap - "679" (3-Buzzer Chiptune Arrangement)
+// =====================================================================
+
+// Frequency Definitions
+#define REST 0
+#define E4   330
+#define FS4  370
+#define G4   392
+#define GS4  415
+#define A4   440
+#define AS4  466
+#define B4   494
+#define C5   523
+#define CS5  554
+#define D5   587
+#define DS5  622
+#define E5   659
+#define F5   698
+#define FS5  740
+#define G5   784
+#define GS5  831
+#define A5   880
+#define AS5  932
+#define B5   988
+#define C6   1047
+#define CS6  1109
+#define D6   1175
+#define DS6  1245
+#define E6   1319
+#define F6   1397
+#define G6   1568
+
+// Hardware Pins for the 3 Buzzers
+const int pinBuzzer1 = 9;  // Lead Melody
+const int pinBuzzer2 = 10; // Arpeggio/Harmony
+const int pinBuzzer3 = 11; // Bassline
+
+// Song Tempo configuration (95 BPM)
+const int tempo = 95;
+const long wholeNoteDuration = (60000 * 4) / tempo; // ~2526 ms per bar
+
+// =====================================================================
+//  TRACK 1: Lead Melody
+// =====================================================================
+const int fettyLead[] PROGMEM = {
+  // --- CHORUS PART 1 (Bars 1-4) ---
+  FS5,4, FS5,8, E5,4, D5,8, B4,4,
+  B4,4, D5,8, E5,4, FS5,8, D5,4,
+  FS5,4, A5,8, FS5,4, E5,8, D5,4,
+  B4,4, B4,8, D5,4, E5,4, REST,8,
+
+  // --- CHORUS PART 2 (Bars 5-8) ---
+  FS5,4, FS5,8, E5,4, D5,8, B4,4,
+  B4,4, D5,8, E5,4, FS5,8, D5,4,
+  FS5,4, A5,8, FS5,4, E5,8, D5,4,
+  B4,4, B4,8, D5,4, E5,4, REST,8,
+
+  // --- THE VERSE (Bars 9-12) ---
+  D5,8, E5,8, D5,8, E5,8, D5,8, E5,8, D5,8, E5,8,
+  D5,8, E5,8, D5,8, E5,8, D5,8, E5,8, D5,8, E5,8,
+  FS5,2, FS5,4, REST,4,
+  FS5,2, E5,8, D5,8, B4,4,
+
+  // --- CHORUS PART 3 (Bars 13-16) ---
+  FS5,4, FS5,8, E5,4, D5,8, B4,4,
+  B4,4, D5,8, E5,4, FS5,8, D5,4,
+  FS5,4, A5,8, FS5,4, E5,8, D5,4,
+  B4,4, B4,8, D5,4, E5,4, REST,8,
+
+  // --- OUTRO / END HOLD (Bars 17-18) ---
+  FS5,1, 
+  B4,1
+};
+
+// =====================================================================
+//  TRACK 2: Arpeggios & Chords
+// =====================================================================
+const int fettyArp[] PROGMEM = {
+  // --- CHORUS PART 1 (Bars 1-4) ---
+  G4,8, B4,8, D5,8, B4,8, G4,8, B4,8, D5,8, B4,8,
+  A4,8, CS5,8, E5,8, CS5,8, A4,8, CS5,8, E5,8, CS5,8,
+  B4,8, D5,8, FS5,8, D5,8, B4,8, D5,8, FS5,8, D5,8,
+  B4,8, D5,8, FS5,8, D5,8, B4,8, D5,8, FS5,8, D5,8,
+
+  // --- CHORUS PART 2 (Bars 5-8) ---
+  G4,8, B4,8, D5,8, B4,8, G4,8, B4,8, D5,8, B4,8,
+  A4,8, CS5,8, E5,8, CS5,8, A4,8, CS5,8, E5,8, CS5,8,
+  B4,8, D5,8, FS5,8, D5,8, B4,8, D5,8, FS5,8, D5,8,
+  B4,8, D5,8, FS5,8, D5,8, B4,8, D5,8, FS5,8, D5,8,
+
+  // --- THE VERSE (Bars 9-12) ---
+  G4,4, REST,4, G4,4, REST,4,
+  A4,4, REST,4, A4,4, REST,4,
+  B4,4, REST,4, B4,4, REST,4,
+  B4,4, REST,4, B4,4, REST,4,
+
+  // --- CHORUS PART 3 (Bars 13-16) ---
+  G4,8, B4,8, D5,8, B4,8, G4,8, B4,8, D5,8, B4,8,
+  A4,8, CS5,8, E5,8, CS5,8, A4,8, CS5,8, E5,8, CS5,8,
+  B4,8, D5,8, FS5,8, D5,8, B4,8, D5,8, FS5,8, D5,8,
+  B4,8, D5,8, FS5,8, D5,8, B4,8, D5,8, FS5,8, D5,8,
+
+  // --- OUTRO / END HOLD (Bars 17-18) ---
+  D5,1,
+  D5,1
+};
+
+// =====================================================================
+//  TRACK 3: Bassline
+// =====================================================================
+const int fettyBass[] PROGMEM = {
+  // --- CHORUS PART 1 (Bars 1-4) ---
+  G4,1,
+  A4,1,
+  B4,1,
+  B4,1,
+
+  // --- CHORUS PART 2 (Bars 5-8) ---
+  G4,1,
+  A4,1,
+  B4,1,
+  B4,1,
+
+  // --- THE VERSE (Bars 9-12) ---
+  G4,1,
+  A4,1,
+  B4,1,
+  B4,1,
+
+  // --- CHORUS PART 3 (Bars 13-16) ---
+  G4,1,
+  A4,1,
+  B4,1,
+  B4,1,
+
+  // --- OUTRO / END HOLD (Bars 17-18) ---
+  G4,1,
+  B4,1
+};
+
+// State variables for the non-blocking player tracking
+int idx1 = 0, idx2 = 0, idx3 = 0;
+unsigned long nextNoteTime1 = 0;
+unsigned long nextNoteTime2 = 0;
+unsigned long nextNoteTime3 = 0;
+
+void setup() {
+  pinMode(pinBuzzer1, OUTPUT);
+  pinMode(pinBuzzer2, OUTPUT);
+  pinMode(pinBuzzer3, OUTPUT);
+}
+
+void loop() {
+  unsigned long currentMillis = millis();
+
+  // --- CHANNEL 1 ENGINE (LEAD) ---
+  if (currentMillis >= nextNoteTime1 && idx1 < (sizeof(fettyLead) / sizeof(int))) {
+    int note = pgm_read_word(&fettyLead[idx1]);
+    int durationType = pgm_read_word(&fettyLead[idx1 + 1]);
+    long duration = wholeNoteDuration / durationType;
+    
+    if (note == REST) {
+      noTone(pinBuzzer1);
+    } else {
+      tone(pinBuzzer1, note, duration * 0.9); // 10% space between notes
+    }
+    nextNoteTime1 = currentMillis + duration;
+    idx1 += 2;
+  }
+
+  // --- CHANNEL 2 ENGINE (ARP) ---
+  if (currentMillis >= nextNoteTime2 && idx2 < (sizeof(fettyArp) / sizeof(int))) {
+    int note = pgm_read_word(&fettyArp[idx2]);
+    int durationType = pgm_read_word(&fettyArp[idx2 + 1]);
+    long duration = wholeNoteDuration / durationType;
+    
+    if (note == REST) {
+      noTone(pinBuzzer2);
+    } else {
+      tone(pinBuzzer2, note, duration * 0.9);
+    }
+    nextNoteTime2 = currentMillis + duration;
+    idx2 += 2;
+  }
+
+  // --- CHANNEL 3 ENGINE (BASS) ---
+  if (currentMillis >= nextNoteTime3 && idx3 < (sizeof(fettyBass) / sizeof(int))) {
+    int note = pgm_read_word(&fettyBass[idx3]);
+    int durationType = pgm_read_word(&fettyBass[idx3 + 1]);
+    long duration = wholeNoteDuration / durationType;
+    
+    if (note == REST) {
+      noTone(pinBuzzer3);
+    } else {
+      tone(pinBuzzer3, note, duration * 0.9);
+    }
+    nextNoteTime3 = currentMillis + duration;
+    idx3 += 2;
+  }
+
+  // Optional: Reset song at the end to loop it infinitely
+  if (idx1 >= (sizeof(fettyLead) / sizeof(int)) &&
+      idx2 >= (sizeof(fettyArp) / sizeof(int)) &&
+      idx3 >= (sizeof(fettyBass) / sizeof(int))) {
+    delay(2000); // Small pause at the absolute end of the song
+    idx1 = 0; idx2 = 0; idx3 = 0;
+    nextNoteTime1 = millis();
+    nextNoteTime2 = millis();
+    nextNoteTime3 = millis();
+  }
+}

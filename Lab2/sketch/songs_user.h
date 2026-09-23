@@ -1,35 +1,33 @@
 /************************************************************
-  songs_user.h - your own three-voice track goes here
+  songs_user.h - your own tracks
   Lab 2: ESP32 Three-Voice Chiptune Jukebox
   ------------------------------------------------------------
-  THE FAST WAY
+  Empty right now. This file holds any number of three-voice
+  tracks; each one adds a row to USER_SONG_ENTRIES, which
+  sketch.ino splices into its playlist.
 
-  If your score already exists in a sketch or a text file, do not
-  paste anything. Point the importer at it and it writes this file
-  for you:
+  ADDING A TRACK
 
-      python3 tools/import_song.py <yourfile> \
+  If the score already exists in a sketch or a text file, don't
+  paste anything - point the importer at it:
+
+      python3 tools/import_song.py <file> \
           --voices <lead>,<harmony>,<bass> \
           --bpm 190 --title "My Track" --style "Trap" --install
 
   It reads arrays in any of the usual shapes - `int x[] = {...}`,
-  `const int x[] = {...}`, `const int x[] PROGMEM = {...}` - checks
-  that the three voices agree in length, refuses to install them if
-  they do not, and sets HAVE_USER_SONG to 1. The track then appears
-  at the end of the playlist, and `make preview` and `make verify`
-  pick it up automatically along with everything else.
+  `const int x[] = {...}`, `const int x[] PROGMEM = {...}` -
+  checks that the three voices agree in length, refuses to install
+  them if they do not, and rewrites this file. Installing a title
+  that is already here replaces just that track and leaves the
+  others alone, so you can re-import after an edit without losing
+  anything.
 
-  Drop --install to just get the report without writing anything.
+  Drop --install to get the report without writing.
 
-  ------------------------------------------------------------
-  THE MANUAL WAY
-
-  Paste your three score arrays over the placeholders below, keeping
-  the names userLead / userHarm / userBass, fill in the title, style
-  and BPM, and change HAVE_USER_SONG to 1.
-
-  With HAVE_USER_SONG at 0, everything in here is compiled out and
-  costs nothing.
+  Once installed, `make verify` and `make preview` cover your
+  tracks alongside the built-in ones, so you can check the timing
+  and hear them before flashing.
 
   ------------------------------------------------------------
   THE ONE RULE
@@ -42,10 +40,9 @@
   arrangement technique - but an accidental mismatch of half a beat
   is just a track that sounds wrong.
 
-  Two things catch that for you: the importer above reports each
-  voice's length in bars and names any that disagree, and the sketch
-  prints an [audit] line over Serial at startup for every voice whose
-  length does not match its lead.
+  The importer catches that, and the sketch prints an [audit] line
+  over Serial at boot for every voice whose length does not match
+  its lead.
 
   A bar of 4/4 adds up to 1.0 when you sum 1/divider over the bar:
   four quarter notes, or eight eighths, or a half plus two quarters.
@@ -59,20 +56,43 @@
   at 190 BPM runs about 23 s per pass and plays three times.
 
   Tempo is worth a moment's thought. The same score at 95 BPM plays
-  at half speed and lands at one 45 s pass instead - which is a
-  different feel, not just a different length. If eighth notes are
-  carrying the groove, the faster reading is usually the one you
-  want.
+  at half speed and lands at one 45 s pass instead - a different
+  feel, not just a different length. If eighth notes are carrying
+  the groove, the faster reading is usually the one you want.
 
   ------------------------------------------------------------
-  BASS RANGE
+  WRITING A BASS PART
 
-  notes.h now goes down to C2, so a bass line no longer has to sit
-  in octave 4 for want of a macro. Be aware that a small passive
-  piezo is a high-Q resonator and falls off steeply below roughly
-  200 Hz: an octave-2 line that looks right on paper can be almost
-  inaudible on cheap parts. Either write the bass in octave 3, or
-  leave it low and set BASS_OCTAVE_SHIFT to 12 in config.h.
+  notes.h goes down to C2, so a bass line does not have to sit in
+  octave 4 for want of a macro. Two things to watch:
+
+    * Keep it below the other voices. A "bass" written in octave 4
+      lands on top of the harmony and doubles it instead of holding
+      the bottom - the commonest fault in a first arrangement.
+    * A small passive piezo is a high-Q resonator and falls off
+      steeply below roughly 200 Hz, so an octave-2 line that looks
+      right on paper can be inaudible. Write it in octave 3, or
+      leave it low and set BASS_OCTAVE_SHIFT to 12 in config.h.
+
+  ------------------------------------------------------------
+  BY HAND
+
+  If you would rather not use the importer, the format this file
+  needs is:
+
+      #define HAVE_USER_SONGS 1
+
+      const int user0Lead[] = { E5,4, D5,8, B4,8, A4,2 };
+      const int user0Harm[] = { A4,8, CS5,8, E5,8, CS5,8,
+                                A4,8, CS5,8, E5,8, CS5,8 };
+      const int user0Bass[] = { A3,2, E3,2 };
+
+      #define USER_SONG_ENTRIES \
+        { "My Track", "Demo", 120, { SCORE(user0Lead), SCORE(user0Harm), SCORE(user0Bass) } },
+
+  Add user1Lead / user1Harm / user1Bass and a second row for a
+  second track, and so on. Every line of the macro except the last
+  needs a trailing backslash, and the last row keeps its comma.
 ************************************************************/
 
 #ifndef SONGS_USER_H
@@ -80,40 +100,6 @@
 
 #include "notes.h"
 
-// Set to 1 once your arrays are in.
-#define HAVE_USER_SONG 0
-
-#define USER_SONG_TITLE "My Track"
-#define USER_SONG_STYLE "User"
-#define USER_SONG_BPM   190
-
-#if HAVE_USER_SONG
-
-// ---- Voice 1: lead ------------------------------------------------
-// The melody. This voice decides how long one pass of the track is.
-const int userLead[] = {
-  // two bars of placeholder - replace the whole array
-  E5,4, E5,8, D5,8, B4,4, A4,4,
-  B4,4, D5,8, E5,8, E5,2
-};
-
-// ---- Voice 2: harmony --------------------------------------------
-// Arpeggios, chord stabs, or a counter-melody. Keep it above the
-// bass and mostly out of the lead's register, or the two square
-// waves will mask each other.
-const int userHarm[] = {
-  A4,8, C5,8, E5,8, C5,8, A4,8, C5,8, E5,8, C5,8,
-  G4,8, B4,8, D5,8, B4,8, G4,8, B4,8, D5,8, B4,8
-};
-
-// ---- Voice 3: bass -----------------------------------------------
-// Roots, and not much else. Long notes read better than busy ones
-// on a piezo.
-const int userBass[] = {
-  A3,2, E4,4, A3,4,
-  G3,2, D4,4, G3,4
-};
-
-#endif  // HAVE_USER_SONG
+#define HAVE_USER_SONGS 0
 
 #endif  // SONGS_USER_H

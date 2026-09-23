@@ -131,8 +131,11 @@ def main():
             extra += x
 
         max_err = max((abs(x) for x in all_errs), default=0)
-        head = all_errs[:max(1, len(all_errs) // 10)]
-        tail = all_errs[-max(1, len(all_errs) // 10):] if all_errs else [0]
+        # Guard both ends: a track where every note was dropped leaves
+        # all_errs empty, and an unguarded max() over it raises rather
+        # than reporting the drop.
+        head = all_errs[:max(1, len(all_errs) // 10)] or [0]
+        tail = all_errs[-max(1, len(all_errs) // 10):] or [0]
         drift = max(abs(x) for x in tail) - max(abs(x) for x in head)
 
         ok = max_err <= tol and abs(drift) <= tol and (

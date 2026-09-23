@@ -11,8 +11,11 @@
 CXX      ?= g++
 CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra -I. -Ihoststub
 
+# songs_user.h belongs in this list: without it, importing a track and
+# re-running `make verify` silently checks the previous binary.
 host_sim: host_sim.cpp ../sketch/chiptune.h ../sketch/config.h \
-          ../sketch/notes.h ../sketch/songs_original.h ../sketch/songs_classic.h
+          ../sketch/notes.h ../sketch/songs_original.h \
+          ../sketch/songs_classic.h ../sketch/songs_user.h
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
 .PHONY: verify stress songs preview clean

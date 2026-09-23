@@ -27,7 +27,7 @@ Every assignment folder is self-contained: firmware, the Wokwi schematic
 | # | Project | Platform | Simulation |
 |---|---------|----------|------------|
 | [SAR 1](SAR1/) | ESP32 Push-Button RGB LED Color Cycler | Arduino (`.ino`) | *link pending* |
-| [SAR 2](SAR2/) | ESP32 Joystick-Controlled Servo | ESP-IDF (`.c`) | [Wokwi](https://wokwi.com/projects/475930488847754241) |
+| [SAR 2](SAR2/) | ESP32 Joystick-Controlled Servo | ESP-IDF (`.c`) + Arduino (`.ino`) | [Wokwi](https://wokwi.com/projects/475930488847754241) |
 
 ---
 
@@ -46,8 +46,11 @@ ENGR-4399-ST-Cyber-Physical-IoT-Systems/
 │   └── SAR1_Critchlow.docx      Submitted report
 └── SAR2/                        Simulation Assignment 2
     ├── README.md
-    ├── main.c                   ESP-IDF firmware
-    └── diagram.json             Wokwi schematic & wiring
+    ├── main.c                   ESP-IDF firmware (reference)
+    ├── sketch.ino               Arduino-framework port
+    ├── diagram.json             Wokwi schematic & wiring
+    ├── figures/                 IEEE-style report figures
+    └── SAR2_Critchlow.docx      Submitted report
 ```
 
 ---

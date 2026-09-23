@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": -57.6,
+      "left": -14.36,
+      "attrs": {
+        "builder": "esp-idf"
+      }
+    },
+    {
+      "type": "wokwi-analog-joystick",
+      "id": "joystick1",
+      "top": 47.4,
+      "left": 255,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo1",
+      "top": 437.8,
+      "left": -229.4,
+      "rotate": 90,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [
+      "esp:TX",
+      "$serialMonitor:RX",
+      "",
+      []
+    ],
+    [
+      "esp:RX",
+      "$serialMonitor:TX",
+      "",
+      []
+    ],
+    [
+      "joystick1:VERT",
+      "esp:35",
+      "purple",
+      [
+        "v38.4",
+        "h-86.4",
+        "v-288",
+        "h-230.4",
+        "v105.6"
+      ]
+    ],
+    [
+      "joystick1:HORZ",
+      "esp:34",
+      "orange",
+      [
+        "v38.4",
+        "h105.6",
+        "v-278.4",
+        "h-422.55"
+      ]
+    ],
+    [
+      "joystick1:SEL",
+      "esp:19",
+      "blue",
+      [
+        "v19.2",
+        "h-86.4",
+        "v-144"
+      ]
+    ],
+    [
+      "servo1:PWM",
+      "esp:18",
+      "green",
+      [
+        "v-48",
+        "h278.2",
+        "v-316.8"
+      ]
+    ],
+    [
+      "joystick1:VCC",
+      "esp:3V3",
+      "red",
+      [
+        "v28.8",
+        "h-297.75"
+      ]
+    ],
+    [
+      "servo1:V+",
+      "esp:5V",
+      "red",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "servo1:GND",
+      "esp:GND.1",
+      "black",
+      [
+        "v0"
+      ]
+    ],
+    [
+      "joystick1:GND",
+      "esp:GND.2",
+      "black",
+      [
+        "v28.8",
+        "h67.2",
+        "v-220.8"
+      ]
+    ]
+  ],
+  "dependencies": {}
+}

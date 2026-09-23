@@ -95,11 +95,6 @@ SSD1306** from Library Manager, open `sketch/sketch.ino`, upload. The Serial
 Monitor at 115200 prints the track, its computed length and repeat count on every
 change.
 
-PlatformIO works too — `platformio.ini` sets `src_dir = sketch`, so `pio run`
-builds the sketch and its headers in place and `pio run -t upload` flashes it.
-`wokwi.toml` sits alongside for the **Wokwi for VS Code** extension; build first,
-since Wokwi simulates firmware but does not compile it.
-
 ### Without any hardware at all
 
 The sequencer builds and runs on a desktop, which is how the timing claims below
@@ -283,10 +278,28 @@ bass motionless at the left.
 
 ## Adding your own track
 
-`sketch/songs_user.h` is the supported slot and needs no changes anywhere else:
-paste three arrays over the placeholders, keep the names `userLead` / `userHarm` /
-`userBass`, fill in the title / style / BPM, and set `HAVE_USER_SONG` to 1. The
-track appears at the end of the playlist.
+If the score already exists in a sketch or a text file, don't paste anything —
+point the importer at it:
+
+```bash
+python3 tools/import_song.py mytrack.txt \
+    --voices myLead,myArp,myBass \
+    --bpm 190 --title "My Track" --style "Trap" --install
+```
+
+That checks the three voices agree in length, refuses to install them if they
+don't, writes `sketch/songs_user.h`, and sets `HAVE_USER_SONG` to 1. The track
+then appears at the end of the playlist — and `make verify` and `make preview`
+pick it up automatically alongside the built-in tracks, so you can hear it and
+check its timing before flashing anything. Drop `--install` to get the report
+without writing.
+
+It reads arrays in any of the shapes they turn up in, including the AVR
+`const int x[] PROGMEM = {...}` idiom.
+
+Otherwise, edit `sketch/songs_user.h` by hand: paste three arrays over the
+placeholders, keep the names `userLead` / `userHarm` / `userBass`, fill in the
+title / style / BPM, and set `HAVE_USER_SONG` to 1.
 
 The score format is the same flat `{note, divider}` array the original sketch
 used, so an existing melody needs no conversion:
@@ -301,18 +314,15 @@ const int userLead[] = {
 ### The one rule
 
 **All three voices must contain the same total duration.** A bar of 4/4 sums to
-1.0 when you add `1/divider` across it. Two things check this for you:
+1.0 when you add `1/divider` across it. Two things check this for you: the
+importer reports each voice's length in bars and names any that disagree, and the
+sketch prints an `[audit]` line over Serial at boot for every voice whose length
+does not match its lead.
 
-```bash
-python3 tools/import_song.py mytrack.txt \
-    --voices userLead,userHarm,userBass --bpm 190
-```
-
-reports each voice's length in bars and names any that disagree — and the sketch
-prints an `[audit]` line over Serial at boot for every voice whose length does not
-match its lead.
-
-You do not need to write a minute of music; the repeat logic covers that.
+You do not need to write a minute of music; the repeat logic covers that. Do give
+the tempo a thought, though — the same score at 95 BPM rather than 190 is half
+speed and one 45 s pass rather than three 23 s ones, which is a different feel and
+not just a different length.
 
 ### Bass range
 
@@ -331,8 +341,6 @@ Lab2/
 ├── README.md                    this file
 ├── EXERCISES.md                 lab exercises
 ├── diagram.json                 Wokwi schematic and wiring
-├── platformio.ini               PlatformIO build config
-├── wokwi.toml                   Wokwi for VS Code config
 ├── sketch/
 │   ├── sketch.ino               playlist, buttons, OLED rendering, loop()
 │   ├── config.h                 every pin and tunable in one place

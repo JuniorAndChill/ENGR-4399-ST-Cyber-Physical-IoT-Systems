@@ -69,6 +69,7 @@ uint32_t millis() { return g_millis; }
 #include "../sketch/chiptune.h"
 #include "../sketch/songs_original.h"
 #include "../sketch/songs_classic.h"
+#include "../sketch/songs_user.h"
 
 // Mirrors the PLAYLIST in sketch.ino. Kept separate so the harness
 // does not need the Adafruit libraries.
@@ -89,6 +90,10 @@ static const Song PLAYLIST[] = {
     { SCORE(fullmetalAlchemist), NO_SCORE, NO_SCORE } },
   { "Super Mario",      "Lead only",     200,
     { SCORE(superMario),         NO_SCORE, NO_SCORE } },
+#if HAVE_USER_SONG
+  { USER_SONG_TITLE,    USER_SONG_STYLE, USER_SONG_BPM,
+    { SCORE(userLead),    SCORE(userHarm),    SCORE(userBass)    } },
+#endif
 };
 static const int NUM_SONGS = sizeof(PLAYLIST) / sizeof(PLAYLIST[0]);
 

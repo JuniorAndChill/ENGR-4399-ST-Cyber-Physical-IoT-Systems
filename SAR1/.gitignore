@@ -1,0 +1,5 @@
+# Arduino / Wokwi build output for SAR1
+build/
+*.hex
+*.elf
+*.bin

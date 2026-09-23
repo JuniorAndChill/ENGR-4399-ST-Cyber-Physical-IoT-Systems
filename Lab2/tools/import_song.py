@@ -90,6 +90,26 @@ def total(pairs):
     return sum(dur(d) for _, d in pairs)
 
 
+def passes_for(one_pass_s, target_s=60.0):
+    """
+    How many times the firmware will repeat a track.
+
+    Mirrors ChiptunePlayer::start():
+        passes = (2*target + pass) / (2*pass)     integer division
+
+    Python's round() is banker's rounding - round(2.5) is 2, not 3 - so a
+    track whose pass length divides the target exactly (679 is exactly
+    24.000 s against a 60 s target) would be reported one repeat short of
+    what the board actually plays. Use the firmware's arithmetic, not
+    Python's.
+    """
+    if one_pass_s <= 0:
+        return 1
+    one_pass_ms = one_pass_s * 1000.0
+    target_ms = target_s * 1000.0
+    return max(1, int((2 * target_ms + one_pass_ms) // (2 * one_pass_ms)))
+
+
 def bar_report(pairs, name):
     """Walk the score and report every bar line that does not land cleanly."""
     pos = Fraction(0)
@@ -210,7 +230,7 @@ def install(arrays, names, args, source):
     for i, (title, style, bpm, vs) in enumerate(tracks):
         bars = float(total(vs[0]))
         one_pass = bars * 4 * 60.0 / bpm
-        passes = max(1, round(60.0 / one_pass)) if one_pass else 1
+        passes = passes_for(one_pass)
         summary.append(f"    {i + 1}. {title} ({style}), {bpm} BPM - "
                        f"{bars:g} bars, {one_pass:.1f} s x{passes} = "
                        f"{one_pass * passes:.1f} s")
@@ -242,7 +262,7 @@ def install(arrays, names, args, source):
 
     bars = float(lens[0])
     one_pass = bars * 4 * 60.0 / args.bpm
-    passes = max(1, round(60.0 / one_pass)) if one_pass else 1
+    passes = passes_for(one_pass)
     verb = "replaced" if replaced else "added"
     print(f"\n{verb} \"{args.title}\" -> {out}")
     print(f"  {bars:g} bars at {args.bpm} BPM = {one_pass:.1f} s per pass, "
@@ -317,7 +337,7 @@ def main():
             print(f"  {n:<20}{float(lens[n]):>9.3f} bars   {flag}")
         if ok:
             secs = float(lead) * 4 * 60.0 / args.bpm
-            loops = max(1, round(60.0 / secs)) if secs else 1
+            loops = passes_for(secs)
             print(f"\n  all voices agree: {float(lead):.0f} bars, "
                   f"{secs:.1f} s per pass, "
                   f"{loops} pass(es) = {secs*loops:.1f} s at {args.bpm} BPM")

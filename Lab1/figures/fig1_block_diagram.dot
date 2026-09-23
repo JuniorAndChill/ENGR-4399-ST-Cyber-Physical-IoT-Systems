@@ -1,0 +1,45 @@
+
+digraph blocks {
+  rankdir=LR;
+  bgcolor="white";
+  fontname="Helvetica";
+  nodesep=0.35; ranksep=0.75;
+  node [shape=box, style="rounded", fontname="Helvetica", fontsize=10,
+        color=black, penwidth=1.1, margin="0.12,0.08"];
+  edge [fontname="Helvetica", fontsize=9, color=black, penwidth=1.0,
+        arrowsize=0.7];
+
+  subgraph cluster_in {
+    label="INPUT"; fontname="Helvetica"; fontsize=10; style="dashed"; color="gray40";
+    sw   [label="SWITCH push button\nGPIO 25, INPUT_PULLUP\nactive LOW"];
+    pg   [label="PAGE push button\nGPIO 32, INPUT_PULLUP\nactive LOW"];
+    dht  [label="DHT11\ntemperature / humidity\nGPIO 4, single-wire"];
+    pir  [label="PIR HC-SR501\nmotion detector\nGPIO 16, digital"];
+  }
+
+  mcu [label="ESP32 DevKit-C V4\n\n40 ms  PWM ramp\n150 ms  display refresh\n2100 ms  sensor read\ncooperative loop()",
+       style="rounded,bold", penwidth=2.0];
+
+  subgraph cluster_out {
+    label="OUTPUT"; fontname="Helvetica"; fontsize=10; style="dashed"; color="gray40";
+    drv  [label="L293D half-bridge\nEN  GPIO 18 (PWM, 1 kHz)\nIn1 GPIO 19   In2 GPIO 5"];
+    mot  [label="DC motor", shape=ellipse, style="solid"];
+    oled [label="SSD1306 OLED 128x64\nI2C 0x3C\nSDA GPIO 21, SCL GPIO 22"];
+    rgb  [label="RGB LED, common cathode\nGPIO 26 / 27 / 33\nvia 220 ohm"];
+  }
+
+  pwr [label="USB 5 V\non-board 3V3 regulator", shape=box, style="dashed"];
+
+  sw  -> mcu [label="debounced edge"];
+  pg  -> mcu [label="debounced edge"];
+  dht -> mcu [label="serial frame"];
+  pir -> mcu [label="level"];
+
+  mcu -> drv  [label="duty + direction"];
+  drv -> mot  [label="bridge output"];
+  mcu -> oled [label="I2C frames"];
+  mcu -> rgb  [label="digital out"];
+
+  pwr -> mcu [style=dashed];
+  pwr -> drv [style=dashed];
+}

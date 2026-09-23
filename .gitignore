@@ -58,6 +58,10 @@ CLAUDE.md
 agents/
 references/
 
+# ---- Python bytecode (figure generator scripts) ----
+__pycache__/
+*.pyc
+
 # ---- Local backups / scratch ----
 *_original.ino
 *.bak

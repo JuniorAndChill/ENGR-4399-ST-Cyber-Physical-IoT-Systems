@@ -1,0 +1,10 @@
+Simulate this project on https://wokwi.com
+
+This lab has no published Wokwi project link yet. To recreate it in the
+browser: open a new ESP32 (Arduino) project, paste sketch/sketch.ino into the
+code tab and diagram.json into the diagram tab, set SIM_WOKWI to 1 in the
+sketch, then press Start.
+
+The Wokwi part library has no L293D or DC motor, and no DHT11. See the
+"Simulating in Wokwi" section of README.md for the substitutions the diagram
+makes and what they do and do not demonstrate.

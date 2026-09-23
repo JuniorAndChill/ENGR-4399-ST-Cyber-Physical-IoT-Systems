@@ -34,10 +34,11 @@ chain of an embedded system with no external libraries.
 
 ## Simulation Link
 
-<!-- Paste the public Wokwi share link here once generated -->
-*Link pending.* The project reproduces exactly from the files in this folder —
-open a new Wokwi **ESP32 (Arduino)** project, paste `sketch/sketch.ino` into the
-code tab and `diagram.json` into the diagram tab, then press **Start**.
+[Click here to view the Wokwi Simulation](https://wokwi.com/projects/475932642565919745)
+
+The project also reproduces exactly from the files in this folder — open a new
+Wokwi **ESP32 (Arduino)** project, paste `sketch/sketch.ino` into the code tab and
+`diagram.json` into the diagram tab, then press **Start**.
 
 ## How It Works
 

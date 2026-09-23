@@ -26,7 +26,7 @@ Every assignment folder is self-contained: firmware, the Wokwi schematic
 
 | # | Project | Platform | Simulation |
 |---|---------|----------|------------|
-| [SAR 1](SAR1/) | ESP32 Push-Button RGB LED Color Cycler | Arduino (`.ino`) | *link pending* |
+| [SAR 1](SAR1/) | ESP32 Push-Button RGB LED Color Cycler | Arduino (`.ino`) | [Wokwi](https://wokwi.com/projects/475932642565919745) |
 | [SAR 2](SAR2/) | ESP32 Joystick-Controlled Servo | ESP-IDF (`.c`) + Arduino (`.ino`) | [Wokwi](https://wokwi.com/projects/475930488847754241) |
 
 ---

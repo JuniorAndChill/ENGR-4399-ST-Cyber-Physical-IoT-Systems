@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "author": "Daniel Critchlow Jr.",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": 0,
+      "left": 0,
+      "attrs": { "builder": "arduino-esp32" }
+    },
+    {
+      "type": "board-ssd1306",
+      "id": "oled",
+      "top": -120,
+      "left": 250,
+      "attrs": { "i2cAddress": "0x3c" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bzLead",
+      "top": 60,
+      "left": 270,
+      "attrs": { "volume": "0.1" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bzHarm",
+      "top": 140,
+      "left": 270,
+      "attrs": { "volume": "0.1" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bzBass",
+      "top": 220,
+      "left": 270,
+      "attrs": { "volume": "0.1" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnNext",
+      "top": 60,
+      "left": -190,
+      "attrs": { "color": "green", "label": "NEXT" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnPlay",
+      "top": 140,
+      "left": -190,
+      "attrs": { "color": "blue", "label": "PLAY" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnMix",
+      "top": 220,
+      "left": -190,
+      "attrs": { "color": "yellow", "label": "MIX" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+
+    [ "esp:D27", "bzLead:2", "green",  [ "h20", "v0" ] ],
+    [ "bzLead:1", "esp:GND.2", "black", [ "h-10", "v120" ] ],
+
+    [ "esp:D26", "bzHarm:2", "green",  [ "h30", "v0" ] ],
+    [ "bzHarm:1", "esp:GND.2", "black", [ "h-10", "v60" ] ],
+
+    [ "esp:D25", "bzBass:2", "green",  [ "h40", "v0" ] ],
+    [ "bzBass:1", "esp:GND.2", "black", [ "h-10", "v0" ] ],
+
+    [ "esp:D21", "oled:SDA", "blue",   [ "h60", "v-140" ] ],
+    [ "esp:D22", "oled:SCL", "violet", [ "h50", "v-150" ] ],
+    [ "esp:3V3", "oled:VCC", "red",    [ "h-30", "v-180" ] ],
+    [ "esp:GND.1", "oled:GND", "black", [ "h-40", "v-190" ] ],
+
+    [ "esp:D32", "btnNext:1.l", "gold",   [ "h-30", "v0" ] ],
+    [ "btnNext:2.l", "esp:GND.3", "black", [ "h-20", "v140" ] ],
+
+    [ "esp:D33", "btnPlay:1.l", "gold",   [ "h-40", "v0" ] ],
+    [ "btnPlay:2.l", "esp:GND.3", "black", [ "h-20", "v70" ] ],
+
+    [ "esp:D4", "btnMix:1.l", "gold",     [ "h-50", "v0" ] ],
+    [ "btnMix:2.l", "esp:GND.3", "black",  [ "h-20", "v0" ] ]
+  ],
+  "dependencies": {}
+}

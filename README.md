@@ -41,6 +41,7 @@ driver that has no Wokwi part.
 | # | Project | Platform | Simulation |
 |---|---------|----------|------------|
 | [Lab 1](Lab1/) | ESP32 DC Motor Controller with OLED Telemetry | Arduino (`.ino`) | Local build; Wokwi with substitute parts |
+| [Lab 2](Lab2/) | ESP32 Three-Voice Chiptune Jukebox with OLED | Arduino (`.ino`) | Wokwi (`diagram.json`); sequencer also runs on a desktop |
 
 ---
 
@@ -69,14 +70,24 @@ ENGR-4399-ST-Cyber-Physical-IoT-Systems/
 │   ├── diagram.json             Wokwi schematic & wiring
 │   ├── figures/                 IEEE-style report figures
 │   └── SAR2_Critchlow.docx      Submitted report
-└── Lab1/                        In-class lab 1
+├── Lab1/                        In-class lab 1
+│   ├── README.md
+│   ├── sketch/sketch.ino        Corrected Arduino firmware
+│   ├── original/                The sketch exactly as run in class
+│   ├── diagram.json             Wokwi schematic & wiring
+│   ├── platformio.ini           PlatformIO build config
+│   ├── wokwi.toml               Wokwi for VS Code config
+│   └── figures/                 IEEE-style figures + generator script
+└── Lab2/                        In-class lab 2
     ├── README.md
-    ├── sketch/sketch.ino        Corrected Arduino firmware
+    ├── EXERCISES.md             Lab exercises
+    ├── sketch/                  sketch.ino + engine, score, sprite headers
     ├── original/                The sketch exactly as run in class
     ├── diagram.json             Wokwi schematic & wiring
     ├── platformio.ini           PlatformIO build config
     ├── wokwi.toml               Wokwi for VS Code config
-    └── figures/                 IEEE-style figures + generator script
+    ├── figures/                 IEEE-style figures
+    └── tools/                   Score generators + desktop test harness
 ```
 
 ---

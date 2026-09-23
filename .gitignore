@@ -1,0 +1,65 @@
+# ===================================================================
+# ENGR 4399 ST: Cyber-Physical & IoT Systems - Daniel Critchlow Jr.
+# ===================================================================
+
+# ---- macOS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+
+# ---- Windows / Linux ----
+Thumbs.db
+desktop.ini
+*~
+.fuse_hidden*
+
+# ---- Microsoft Office lock / autosave files ----
+~$*.docx
+~$*.doc
+~$*.xlsx
+~$*.pptx
+*.tmp
+
+# ---- Editors / IDEs ----
+.vscode/
+.idea/
+*.code-workspace
+*.swp
+*.swo
+
+# ---- Embedded build artifacts (Arduino / PlatformIO / ESP-IDF) ----
+build/
+.pio/
+.pioenvs/
+.piolibdeps/
+sdkconfig
+sdkconfig.old
+managed_components/
+dependencies.lock
+*.elf
+*.bin
+*.map
+*.o
+*.a
+*.hex
+
+# ---- Instructor-provided course materials (not redistributed) ----
+templates/
+**/WOKWI ASSIGN*.pdf
+**/*Grading Rubric*.pdf
+
+# ---- Local report-building workflow (not part of the graded submission) ----
+CLAUDE.md
+.claude/
+agents/
+references/
+
+# ---- Local backups / scratch ----
+*_original.ino
+*.bak
+*.orig
+scratch/

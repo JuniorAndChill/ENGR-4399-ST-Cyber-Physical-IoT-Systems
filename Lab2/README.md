@@ -288,18 +288,21 @@ python3 tools/import_song.py mytrack.txt \
 ```
 
 That checks the three voices agree in length, refuses to install them if they
-don't, writes `sketch/songs_user.h`, and sets `HAVE_USER_SONG` to 1. The track
-then appears at the end of the playlist — and `make verify` and `make preview`
-pick it up automatically alongside the built-in tracks, so you can hear it and
-check its timing before flashing anything. Drop `--install` to get the report
-without writing.
+don't, and writes `sketch/songs_user.h`. The track then appears at the end of the
+playlist — and `make verify` and `make preview` pick it up automatically alongside
+the built-in tracks, so you can hear it and check its timing before flashing
+anything. Drop `--install` to get the report without writing.
+
+`songs_user.h` holds **any number** of tracks. Installing a title that is already
+there replaces just that one and leaves the rest alone, so you can re-import after
+an edit without losing anything.
 
 It reads arrays in any of the shapes they turn up in, including the AVR
 `const int x[] PROGMEM = {...}` idiom.
 
-Otherwise, edit `sketch/songs_user.h` by hand: paste three arrays over the
-placeholders, keep the names `userLead` / `userHarm` / `userBass`, fill in the
-title / style / BPM, and set `HAVE_USER_SONG` to 1.
+Otherwise, edit `sketch/songs_user.h` by hand — it documents the format: three
+arrays named `user0Lead` / `user0Harm` / `user0Bass`, a row in the
+`USER_SONG_ENTRIES` macro, and `HAVE_USER_SONGS` set to the track count.
 
 The score format is the same flat `{note, divider}` array the original sketch
 used, so an existing melody needs no conversion:

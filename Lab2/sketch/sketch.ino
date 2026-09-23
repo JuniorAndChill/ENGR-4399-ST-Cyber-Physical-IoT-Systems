@@ -92,9 +92,10 @@ const Song PLAYLIST[] = {
     { SCORE(superMario),         NO_SCORE, NO_SCORE } },
 #endif
 
-#if HAVE_USER_SONG
-  { USER_SONG_TITLE,    USER_SONG_STYLE, USER_SONG_BPM,
-    { SCORE(userLead),    SCORE(userHarm),    SCORE(userBass)    } },
+  // Tracks imported with tools/import_song.py --install. The macro
+  // expands to one row per track, or to nothing when none are installed.
+#if HAVE_USER_SONGS
+  USER_SONG_ENTRIES
 #endif
 };
 const uint8_t NUM_SONGS = sizeof(PLAYLIST) / sizeof(PLAYLIST[0]);

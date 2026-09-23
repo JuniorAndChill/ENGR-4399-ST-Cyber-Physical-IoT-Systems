@@ -90,9 +90,8 @@ static const Song PLAYLIST[] = {
     { SCORE(fullmetalAlchemist), NO_SCORE, NO_SCORE } },
   { "Super Mario",      "Lead only",     200,
     { SCORE(superMario),         NO_SCORE, NO_SCORE } },
-#if HAVE_USER_SONG
-  { USER_SONG_TITLE,    USER_SONG_STYLE, USER_SONG_BPM,
-    { SCORE(userLead),    SCORE(userHarm),    SCORE(userBass)    } },
+#if HAVE_USER_SONGS
+  USER_SONG_ENTRIES
 #endif
 };
 static const int NUM_SONGS = sizeof(PLAYLIST) / sizeof(PLAYLIST[0]);

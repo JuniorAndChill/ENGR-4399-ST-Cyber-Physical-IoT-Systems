@@ -154,28 +154,34 @@ def timeline(voices, bpm, cfg, notes):
     return events, pass_us, n_pass, total
 
 
-def load_user_song():
+ENTRY_RE = re.compile(
+    r'\{\s*"([^"]*)"\s*,\s*"([^"]*)"\s*,\s*(\d+)\s*,\s*\{\s*'
+    r'SCORE\((\w+)\)\s*,\s*SCORE\((\w+)\)\s*,\s*SCORE\((\w+)\)')
+
+
+def load_user_songs():
     """
-    Read sketch/songs_user.h. Returns (title, bpm, [lead, harm, bass]) when
-    HAVE_USER_SONG is 1, else None - so the desktop tools cover an imported
-    track automatically, exactly as the firmware does.
+    Every track installed in sketch/songs_user.h, as (title, bpm, voices).
+
+    Reading the same USER_SONG_ENTRIES macro the firmware compiles means
+    the desktop tools cover imported tracks automatically - no second list
+    to keep in sync.
     """
     path = os.path.join(SKETCH, "songs_user.h")
     if not os.path.exists(path):
-        return None
-    text = strip_comments(open(path).read())
-    m = re.search(r"#define\s+HAVE_USER_SONG\s+(\d+)", text)
-    if not m or m.group(1) == "0":
-        return None
-    title = re.search(r'#define\s+USER_SONG_TITLE\s+"([^"]*)"', text)
-    bpm = re.search(r"#define\s+USER_SONG_BPM\s+(\d+)", text)
+        return []
+    raw = open(path).read()
+    if re.search(r"#define\s+HAVE_USER_SONGS\s+0", raw):
+        return []
+    text = strip_comments(raw)
     arrays = load_arrays([path])
-    voices = [arrays.get(n) for n in ("userLead", "userHarm", "userBass")]
-    if not voices[0]:
-        return None
-    return (title.group(1) if title else "User Track",
-            int(bpm.group(1)) if bpm else 120,
-            voices)
+    out = []
+    for title, _style, bpm, l, h, b in ENTRY_RE.findall(text):
+        if l not in arrays:
+            continue
+        out.append((title, int(bpm),
+                    [arrays.get(l), arrays.get(h), arrays.get(b)]))
+    return out
 
 
 def default_playlist():
@@ -199,7 +205,5 @@ def default_playlist():
     for title, bpm, names in spec:
         out.append((title, bpm, [arrays.get(n) if n else None for n in names]))
 
-    user = load_user_song()
-    if user:
-        out.append(user)
+    out.extend(load_user_songs())
     return out, notes, load_config()

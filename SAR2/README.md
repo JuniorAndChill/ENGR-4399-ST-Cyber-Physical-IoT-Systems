@@ -83,23 +83,42 @@ servo identically.
 
 | File | Framework | Notes |
 |------|-----------|-------|
-| `main.c` | ESP-IDF | Reference implementation; `adc_oneshot` + `ledc` drivers |
+| `main/main.c` | ESP-IDF | Reference implementation; `adc_oneshot` + `ledc` drivers |
 | `sketch.ino` | Arduino (arduino-esp32 3.x) | Functional port; uses `ledcAttach` / `ledcWrite` |
 
-## Reproducing
+## Running the Simulation Locally (VS Code)
+
+Requires the **Wokwi for VS Code** and **Espressif ESP-IDF** extensions. Wokwi
+simulates a compiled binary — it does not build the code — so build first.
+
+1. Open this `SAR2` folder as its own VS Code window (`File → Open Folder…`).
+   The Wokwi extension reads `wokwi.toml` and `diagram.json` from the folder root.
+2. Build: `idf.py set-target esp32` (first time only), then `idf.py build` — or use
+   the ESP-IDF extension's **Build** button. This produces
+   `build/flasher_args.json` and `build/sar2_joystick_servo.elf`, the paths
+   `wokwi.toml` points at.
+3. Press `F1` → **Wokwi: Start Simulator**.
+
+Drag the on-canvas joystick to sweep the servo; click it to recenter. Serial
+output appears in the simulator's terminal.
+
+## Reproducing in the Browser
 
 Open a new Wokwi project for the framework you want — **ESP32 (ESP-IDF)** for
-`main.c`, **ESP32 (Arduino)** for `sketch.ino` — paste the firmware into the code
-tab and `diagram.json` into the diagram tab, then press **Start**. The Wokwi
-ESP-IDF template supplies the `CMakeLists.txt` build files, so they are not
-duplicated here.
+`main/main.c`, **ESP32 (Arduino)** for `sketch.ino` — paste the firmware into the
+code tab and `diagram.json` into the diagram tab, then press **Start**. The browser
+ESP-IDF template supplies its own build files; the `CMakeLists.txt` files here are
+for the local `idf.py` build.
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| `main.c` | ESP-IDF firmware (reference implementation) |
+| `main/main.c` | ESP-IDF firmware (reference implementation) |
 | `sketch.ino` | Arduino-framework port |
+| `CMakeLists.txt`, `main/CMakeLists.txt` | ESP-IDF build files |
+| `sdkconfig.defaults` | Baseline ESP-IDF configuration |
+| `wokwi.toml` | Wokwi for VS Code simulation config |
 | `diagram.json` | Wokwi schematic and wiring |
 | `figures/` | IEEE-style report figures (block diagram, control flow, ADC transfer, PWM timing, smoothing response, simulation captures) |
 | `SAR2_Critchlow.docx` | Submitted report |

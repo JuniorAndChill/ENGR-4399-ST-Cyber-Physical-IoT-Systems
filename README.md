@@ -41,13 +41,18 @@ ENGR-4399-ST-Cyber-Physical-IoT-Systems/
 │   ├── README.md
 │   ├── sketch/sketch.ino        Arduino firmware
 │   ├── diagram.json             Wokwi schematic & wiring
+│   ├── platformio.ini           PlatformIO build config
+│   ├── wokwi.toml               Wokwi for VS Code config
 │   ├── SAR1_Screenshot.png      Wokwi circuit view
 │   ├── SAR1_ServiceFail.png     Build-queue error evidence
 │   └── SAR1_Critchlow.docx      Submitted report
 └── SAR2/                        Simulation Assignment 2
     ├── README.md
-    ├── main.c                   ESP-IDF firmware (reference)
+    ├── main/main.c              ESP-IDF firmware (reference)
     ├── sketch.ino               Arduino-framework port
+    ├── CMakeLists.txt           ESP-IDF build files
+    ├── sdkconfig.defaults       Baseline ESP-IDF configuration
+    ├── wokwi.toml               Wokwi for VS Code config
     ├── diagram.json             Wokwi schematic & wiring
     ├── figures/                 IEEE-style report figures
     └── SAR2_Critchlow.docx      Submitted report
@@ -55,13 +60,26 @@ ENGR-4399-ST-Cyber-Physical-IoT-Systems/
 
 ---
 
-### Reproducing a Simulation
+### Running a Simulation
 
-1. Open [wokwi.com](https://wokwi.com) and start a new project for the assignment's
-   platform — **ESP32 (Arduino)** for SAR 1, **ESP32 (ESP-IDF)** for SAR 2.
-2. Paste the assignment's firmware (`sketch.ino` or `main.c`) into the code tab.
-3. Paste the assignment's `diagram.json` into the diagram tab.
-4. Press **Start** to compile and run.
+**In the browser.** Open [wokwi.com](https://wokwi.com), start a new project for the
+assignment's platform — **ESP32 (Arduino)** for SAR 1, **ESP32 (ESP-IDF)** for SAR 2
+— paste the firmware into the code tab and the assignment's `diagram.json` into the
+diagram tab, then press **Start**. The simulation links in the table above open the
+published projects directly.
+
+**Locally in VS Code.** Each assignment folder carries a `wokwi.toml` alongside its
+`diagram.json`, so the **Wokwi for VS Code** extension can run it against a locally
+compiled binary. Wokwi simulates firmware but does not build it, so compile first:
+
+| Assignment | Toolchain | Build command | Artifacts |
+|------------|-----------|---------------|-----------|
+| SAR 1 | PlatformIO (Arduino) | `pio run` | `.pio/build/esp32dev/firmware.{bin,elf}` |
+| SAR 2 | ESP-IDF | `idf.py build` | `build/flasher_args.json`, `build/sar2_joystick_servo.elf` |
+
+Open the assignment folder as its own VS Code window — the extension looks for
+`wokwi.toml` at the workspace root — build, then press `F1` →
+**Wokwi: Start Simulator**. Build output is gitignored.
 
 ---
 

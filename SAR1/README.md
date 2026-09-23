@@ -57,6 +57,20 @@ and a `switch` maps the new state to a channel pattern through the `setColor()`
 helper. Because the debounce uses `millis()` instead of `delay()`, the loop stays
 non-blocking and the technique scales to systems with additional tasks.
 
+## Running the Simulation Locally (VS Code)
+
+Requires the **Wokwi for VS Code** and **PlatformIO IDE** extensions. Wokwi
+simulates a compiled binary — it does not build the code — so build first.
+
+1. Open this `SAR1` folder as its own VS Code window (`File → Open Folder…`).
+   The Wokwi extension reads `wokwi.toml` and `diagram.json` from the folder root.
+2. Build: PlatformIO sidebar → `esp32dev` → **General → Build** (or run `pio run`).
+   This produces `.pio/build/esp32dev/firmware.bin` and `firmware.elf`, which are
+   the paths `wokwi.toml` points at.
+3. Press `F1` → **Wokwi: Start Simulator**.
+
+Click the on-canvas push button to cycle the LED.
+
 ## Verification
 
 | # | Input | Expected | Result |
@@ -88,6 +102,8 @@ non-blocking and the technique scales to systems with additional tasks.
 |------|-------------|
 | `sketch/sketch.ino` | Arduino firmware |
 | `diagram.json` | Wokwi schematic and wiring |
+| `platformio.ini` | PlatformIO build config (ESP32, Arduino framework) |
+| `wokwi.toml` | Wokwi for VS Code simulation config |
 | `SAR1_Screenshot.png` | Assembled Wokwi circuit |
 | `SAR1_ServiceFail.png` | Build-servers-busy message |
 | `SAR1_Critchlow.docx` | Submitted report |

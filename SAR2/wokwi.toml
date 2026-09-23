@@ -1,0 +1,10 @@
+# Wokwi for VS Code - SAR 2 (ESP-IDF)
+# Build with `idf.py build` first, then F1 -> "Wokwi: Start Simulator".
+#
+# firmware points at flasher_args.json so the simulator loads the bootloader,
+# partition table, and application image together.
+
+[wokwi]
+version = 1
+firmware = 'build/flasher_args.json'
+elf = 'build/sar2_joystick_servo.elf'

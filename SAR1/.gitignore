@@ -1,4 +1,5 @@
-# Arduino / Wokwi build output for SAR1
+# Arduino / PlatformIO build output for SAR1
+.pio/
 build/
 *.hex
 *.elf

@@ -1,0 +1,10 @@
+# Wokwi for VS Code - Lab 2
+# Build with `pio run` first, then F1 -> "Wokwi: Start Simulator".
+#
+# Wokwi simulates firmware but does not build it, so the binary has to
+# exist before the simulator starts.
+
+[wokwi]
+version = 1
+firmware = '.pio/build/esp32dev/firmware.bin'
+elf = '.pio/build/esp32dev/firmware.elf'

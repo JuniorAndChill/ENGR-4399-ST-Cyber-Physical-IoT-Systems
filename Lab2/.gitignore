@@ -1,0 +1,8 @@
+# Host-side build and scratch output for the Lab 2 tools.
+tools/host_sim
+tools/*.o
+tools/events.csv
+tools/sim.log
+
+# Rendered audio previews - regenerate with `make preview`.
+preview/
